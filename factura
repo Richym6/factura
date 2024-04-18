@@ -1,0 +1,91 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+// Estructura para almacenar la información de cada item comprado
+struct Item {
+    char nombre[50];
+    float precio;
+};
+
+int main() {
+    // Datos de la persona
+    char nombre[50];
+    char apellido[50];
+    char cedula[20];
+
+    printf("========================================\n");
+    printf("FUENTE DE SODA\n");
+    printf("========================================\n");
+
+    printf("Ingrese su nombre: ");
+    fgets(nombre, sizeof(nombre), stdin);
+    nombre[strcspn(nombre, "\n")] = 0; // Eliminar el carácter de nueva línea
+    printf("Ingrese su apellido: ");
+    fgets(apellido, sizeof(apellido), stdin);
+    apellido[strcspn(apellido, "\n")] = 0; // Eliminar el carácter de nueva línea
+    printf("Ingrese su cedula: ");
+    fgets(cedula, sizeof(cedula), stdin);
+    cedula[strcspn(cedula, "\n")] = 0; // Eliminar el carácter de nueva línea
+
+    // Items comprados
+    struct Item items[10]; // Se puede comprar hasta 10 items
+    int num_items;
+
+    printf("Ingrese la cantidad de items comprados: ");
+    scanf("%d", &num_items);
+    getchar(); // Limpiar el buffer del salto de línea
+
+    if (num_items < 1 || num_items > 10) {
+        printf("La cantidad de items debe estar entre 1 y 10.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < num_items; i++) {
+        printf("Ingrese el nombre del item %d: ", i + 1);
+        fgets(items[i].nombre, sizeof(items[i].nombre), stdin);
+        items[i].nombre[strcspn(items[i].nombre, "\n")] = 0; // Eliminar el carácter de nueva línea
+        printf("Ingrese el precio del item %d: ", i + 1);
+        scanf("%f", &items[i].precio);
+        getchar(); // Limpiar el buffer del salto de línea
+    }
+
+    // Fecha de la compra
+    char fecha[20];
+    printf("Ingrese la fecha de la compra (DD/MM/AAAA): ");
+    fgets(fecha, sizeof(fecha), stdin);
+    fecha[strcspn(fecha, "\n")] = 0; // Eliminar el carácter de nueva línea
+
+    // Calcular el monto total de la compra
+    float total = 0;
+    for (int i = 0; i < num_items; i++) {
+        total += items[i].precio;
+    }
+
+    // Aplicar descuento si se compraron más de dos items
+    float descuento = 0;
+    if (num_items > 2) {
+        descuento = total * 0.1; // 10% de descuento
+        total -= descuento;
+    }
+
+    // Imprimir el comprobante
+    printf("========================================\n");
+    printf("Nombre: %s %s\n", nombre, apellido);
+    printf("Cedula: %s\n", cedula);
+    printf("========================================\n");
+    printf("Items Comprados:\n");
+    for (int i = 0; i < num_items; i++) {
+        printf("%s - %.2f\n", items[i].nombre, items[i].precio);
+    }
+    printf("========================================\n");
+    printf("Fecha de Compra: %s\n", fecha);
+    printf("========================================\n");
+    printf("Monto Total: %.2f\n", total);
+    if (descuento > 0) {
+        printf("Descuento (10%%): %.2f\n", descuento);
+    }
+    printf("========================================\n");
+
+    return 0;
+}
